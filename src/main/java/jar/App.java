@@ -7,6 +7,7 @@ import jar.controller.AppController;
 import jar.util.AppException;
 
 /**
+ * メインメソッド実行クラス
  */
 public class App {
 
