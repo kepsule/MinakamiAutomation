@@ -1,0 +1,46 @@
+package jar;
+
+import java.nio.file.Paths;
+import java.util.function.Consumer;
+
+import jar.controller.AppController;
+import jar.util.AppException;
+
+/**
+ */
+public class App {
+
+	/** ステータスコード。
+	 * 0以外は例外発生とする。 */
+	private static int exitCode = 0;
+
+	/** mainメソッド。
+	 *  引数にExcelのファイル名、シート名を受けとり、
+	 *  処理を実行する。
+	 *  例外は当メソッドでcatchする。*/
+	public static void main(String[] args) {
+
+		try {
+
+			new AppController().execute(
+					Paths.get("src/main/resources/Sample001.xlsx"), "Sheet1");
+
+		} catch (Throwable t) {
+
+			errHandling.accept(t);
+		}
+
+		System.exit(exitCode);
+	}
+
+	/** エラー時の処理 */
+	private static final Consumer<Throwable> errHandling =
+		t -> {
+			exitCode = 1;
+			if (t instanceof AppException) {
+				System.out.println(((AppException)t).getErrMessage.get());
+				System.out.println(((AppException)t).getOperationData.get());
+			}
+			t.printStackTrace();
+	};
+}
