@@ -52,7 +52,7 @@ public class ExcelAnalyzer {
 						.getCell(ExcelDataEnum.URL_CELL.getCol())
 							.getStringCellValue();
 
-		/* エビデンス格納パス */
+		/* エビデンス格納パス デフォルトはカレントディレクトリ */
 		Path evidenceFolder;
 		String evidence =
 			sheet.getRow(

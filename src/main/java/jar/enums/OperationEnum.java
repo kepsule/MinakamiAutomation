@@ -26,19 +26,19 @@ public enum OperationEnum {
 			getElement.apply(odb).click();
 		}
 	},
-	DOUBLECLICK {
+	DOUBLE_CLICK {
 		@Override
 		public void operate(OperationDataBean odb) throws AppException {
 			getElement.apply(odb).doubleClick();
 		}
 	},
-	SENDKEYS {
+	SEND_KEYS {
 		@Override
 		public void operate(OperationDataBean odb) throws AppException {
 			getElement.apply(odb).sendKeys(odb.getInputData());
 		}
 	},
-	PRESSENTER {
+	PRESS_ENTER {
 		@Override
 		public void operate(OperationDataBean odb) throws AppException {
 			getElement.apply(odb).pressEnter();
@@ -49,7 +49,7 @@ public enum OperationEnum {
 		public void operate(OperationDataBean odb) throws AppException {
 		}
 	},
-	VALUECHECK {
+	VALUE_CHECK {
 		@Override
 		public void operate(OperationDataBean odb) throws AppException {
 			/* inputと一致していなければ例外スロー */
@@ -72,7 +72,7 @@ public enum OperationEnum {
 		}
 	},
 	/** プルダウン */
-	TEXTCHECK {
+	TEXT_CHECK {
 
 		@Override
 		public void operate(OperationDataBean odb) throws AppException {
@@ -85,7 +85,7 @@ public enum OperationEnum {
 			}
 		}
 	},
-	ELEMENTCAPTURE {
+	ELEMENT_CAPTURE {
 
 		@Override
 		public void operate(OperationDataBean odb) throws AppException {
@@ -95,7 +95,7 @@ public enum OperationEnum {
 							CommonDataBean.getEvidenceNumAndIncrement() + ".png").toFile());
 		}
 	},
-	IMAGECAPTURE {
+	IMAGE_CAPTURE {
 
 		/** デフォルトだとbuiled/test/resources直下
 		 * @throws IOException */
@@ -115,20 +115,21 @@ public enum OperationEnum {
 			}
 		}
 	},
-	EXECUTESQL {
+	EXECUTE_SQL {
 		@Override
 		public void operate(OperationDataBean odb) throws AppException {
 
-			/* DBに接続 */
-			try (ResultSet rs = DbConnector.getInstance().getRs(
+			/* SQL実行 */
+			try {
+				DbConnector.getInstance().execute(
 					CommonDataBean.getDbPath(), CommonDataBean.getDbProps(),
-					odb.getInputData())) {
+					odb.getInputData());
 			} catch (SQLException e) {
 				throw new AppException("SQLException", this.name() + "failed");
 			}
 		}
 	},
-	EXECUTESQLANDASSERT{
+	EXECUTE_SQL_AND_ASSERT{
 		@Override
 		public void operate(OperationDataBean odb) throws AppException {
 
@@ -148,7 +149,7 @@ public enum OperationEnum {
 			}
 		}
 	},
-	EXECUTESQLANDASSERTNORECORD{
+	EXECUTE_SQL_AND_ASSERT_NO_RECORD{
 		@Override
 		public void operate(OperationDataBean odb) throws AppException {
 

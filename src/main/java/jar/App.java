@@ -4,6 +4,7 @@ import java.nio.file.Paths;
 import java.util.function.Consumer;
 
 import jar.controller.AppController;
+import jar.logger.Logging;
 import jar.util.AppException;
 
 /**
@@ -39,8 +40,8 @@ public class App {
 		t -> {
 			exitCode = 1;
 			if (t instanceof AppException) {
-				System.out.println(((AppException)t).getErrMessage.get());
-				System.out.println(((AppException)t).getOperationData.get());
+				Logging.error(((AppException)t).getErrMessage.get());
+				Logging.error(((AppException)t).getOperationData.get());
 			}
 			t.printStackTrace();
 	};
