@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
 
@@ -28,6 +29,17 @@ import jar.enums.OperationEnum;
 
 public class ExcelAnalyzer {
 
+	/** Pathで与えられたExcelファイルのSheet名をIteratorで返却する。 */
+	public Iterator<Sheet> getSheetNameIterator(Path excelPath)
+			throws InvalidFormatException, EncryptedDocumentException, FileNotFoundException, IOException{
+
+		/* PathからExcelデータに変換 */
+		return
+				WorkbookFactory.create(
+						new FileInputStream(excelPath.toFile())).sheetIterator();
+	}
+
+	/** Excelファイルを解析し、テスト実行データのBeanを生成する。 */
 	public List<OperationDataBean> analyzeExcel(Path excelPath, String sheetName)
 				throws EncryptedDocumentException, InvalidFormatException,
 						FileNotFoundException, IOException {
@@ -179,7 +191,7 @@ public class ExcelAnalyzer {
 		return odbList;
 	}
 
-	/** NumericCellのcheck */
+	/** cellのnull check */
 	private Function<Cell, String> getCellValueAsString =
 		cell -> cell == null ? "" : cell.getStringCellValue();
 

@@ -5,6 +5,7 @@ import jar.connector.FireFoxConnector;
 
 public enum BrowserEnum {
 
+	/** FireFox以外未実装 */
 	FireFox(new FireFoxConnector()),
 	InternetExplorer(null),
 	GoogleChrome(null);

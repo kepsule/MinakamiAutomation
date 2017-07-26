@@ -2,9 +2,9 @@ package jar.operator;
 
 import static com.codeborne.selenide.Selenide.*;
 
-import java.util.Iterator;
 import java.util.List;
 
+import jar.App;
 import jar.bean.OperationDataBean;
 import jar.util.AppException;
 
@@ -23,10 +23,7 @@ public class FileDataExecutor {
 		open(odbList.get(0).getStartUrl());
 
 		/* 操作 */
-		Iterator<OperationDataBean> odbiter = odbList.iterator();
-		while (odbiter.hasNext()) {
-			OperationDataBean odb = odbiter.next();
-
+		odbList.iterator().forEachRemaining(odb -> {
 			/* 操作処理 */
 			try {
 				odb.getOperationEnum().operate(odb);
@@ -35,10 +32,9 @@ public class FileDataExecutor {
 			} catch (AppException e) {
 
 				e.setOperationDataBean(odb);
-				throw e;
+				App.errHandling.accept(e);
 			}
-		}
-
+		});
 		close();
 	}
 }

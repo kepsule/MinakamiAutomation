@@ -7,6 +7,7 @@ import jar.constant.Const;
 
 public class FireFoxConnector implements BrowserConnector {
 
+	/** FireFoxで実施の場合の前準備 */
 	@Override
 	public void setUp() {
 

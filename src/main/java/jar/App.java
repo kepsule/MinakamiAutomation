@@ -1,10 +1,14 @@
 package jar;
 
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.function.Consumer;
+import java.util.stream.IntStream;
 
 import jar.controller.AppController;
 import jar.logger.Logging;
+import jar.logger.ResultRecorder;
+import jar.notification.SlackNotifier;
 import jar.util.AppException;
 
 /**
@@ -17,28 +21,44 @@ public class App {
 	private static int exitCode = 0;
 
 	/** mainメソッド。
-	 *  引数にExcelのファイル名、シート名を受けとり、
-	 *  処理を実行する。
-	 *  例外は当メソッドでcatchする。*/
+	 *  引数にExcelのファイル名（の配列）を受けとり、
+	 *  処理を実行する。。*/
 	public static void main(String[] args) {
 
+		/* 結果ファイル初期化 */
 		try {
-
-			new AppController().execute(
-					Paths.get("src/main/resources/Sample001.xlsx"), "Sheet1");
-
-		} catch (Throwable t) {
-
-			errHandling.accept(t);
+			ResultRecorder.getInstance().flushResultRecord();
+		} catch (IOException e) {
+			errHandling.accept(e);
 		}
 
+		/* Excel実行 */
+		IntStream.range(0, args.length).forEach(
+				i -> 	{
+					try {
+
+						new AppController().execute(Paths.get(args[i]));
+
+					} catch (Throwable e) {
+						errHandling.accept(e);
+					}
+				});
+
+		/* 結果のフィードバック */
+		if (exitCode == 0) { Logging.info("success");}
+		try {
+			SlackNotifier.getInstance().notifyBySlack();
+		} catch (IOException e) {
+			errHandling.accept(e);
+		}
 		System.exit(exitCode);
 	}
 
 	/** エラー時の処理 */
-	private static final Consumer<Throwable> errHandling =
+	public static final Consumer<Throwable> errHandling =
 		t -> {
 			exitCode = 1;
+			Logging.error(t.getMessage());
 			if (t instanceof AppException) {
 				Logging.error(((AppException)t).getErrMessage.get());
 				Logging.error(((AppException)t).getOperationData.get());

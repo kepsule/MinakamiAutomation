@@ -1,5 +1,6 @@
 package jar.enums;
 
+/** Excelの列対応Enum */
 public enum ColEnum {
 
 	A(0), B(1), C(2), D(3),
