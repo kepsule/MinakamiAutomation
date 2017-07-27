@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.riversun.slacklet.SlackletService;
 
+import jar.App;
 import jar.logger.ResultReader;
 
 public class SlackNotifier {
@@ -12,27 +13,33 @@ public class SlackNotifier {
 	private SlackNotifier() {}
 	public static SlackNotifier getInstance() {return sn;}
 
+	/** Slackのトークン名を指定 */
+	private static final String slackToken =
+			"xoxp-209416897524-209292195411-219579231879-0dd39dbf8d3fb4724cc662bf9180d24d";
+
+	/** Slackのチャンネル名 */
+	private static final String channelName = "testresult";
+
 	public void notifyBySlack() throws IOException {
 
-		SlackletService slackService = new SlackletService(
-				"xoxp-209416897524-209292195411-208827104129-32d1a1228fc3bcab6fa82588e07d27e4");
+		SlackletService slackService =
+				new SlackletService(slackToken);
 	    try {
 			slackService.start();
 		} catch (IOException e) {
 			e.printStackTrace();
+			App.errHandling.accept(e);
 		}
-
-	    String channelName = "testresult";
 
 	    StringBuilder sb = new StringBuilder();
 	    new ResultReader().readResult()
-	    	.forEach((k, v) -> sb.append(k.name() + " : " + v + " "));
+	    	.forEach((k, v) -> sb.append(k + " : " + v + " "));
 	    slackService.sendMessageTo(channelName, sb.toString());
 
 	    try {
 			slackService.stop();
 		} catch (IOException e) {
-			e.printStackTrace();
+			App.errHandling.accept(e);
 		}
 	}
 }

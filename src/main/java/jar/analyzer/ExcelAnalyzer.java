@@ -67,11 +67,11 @@ public class ExcelAnalyzer {
 		/* エビデンス格納パス デフォルトはカレントディレクトリ */
 		Path evidenceFolder;
 		String evidence =
-			sheet.getRow(
-				ExcelDataEnum.EVIDENCE_CELL.getRow())
-					.getCell(ExcelDataEnum.EVIDENCE_CELL.getCol(),
-							Row.MissingCellPolicy.RETURN_BLANK_AS_NULL)
-						.getStringCellValue();
+			getCellValueAsString.apply(
+				sheet.getRow(
+					ExcelDataEnum.EVIDENCE_CELL.getRow())
+						.getCell(ExcelDataEnum.EVIDENCE_CELL.getCol(),
+							Row.MissingCellPolicy.RETURN_BLANK_AS_NULL));
 		if ("".equals(evidence)) {
 			evidenceFolder = Paths.get(".");
 		} else {

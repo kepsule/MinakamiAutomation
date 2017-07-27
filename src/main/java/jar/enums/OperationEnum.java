@@ -60,14 +60,25 @@ public enum OperationEnum {
 			}
 		}
 	},
-	EXISTS {
+	EXIST {
 		@Override
 		public void operate(OperationDataBean odb) throws AppException {
 
 			/* inputと一致していなければ例外スロー */
 			if (!getElement.apply(odb).exists()) {
 				throw new AssertException(
-						"element is Not Exists");
+						"element is Not Exist");
+			}
+		}
+	},
+	NOT_EXIST {
+		@Override
+		public void operate(OperationDataBean odb) throws AppException {
+
+			/* inputと一致していれば例外スロー */
+			if (getElement.apply(odb).exists()) {
+				throw new AssertException(
+						"element is Exist");
 			}
 		}
 	},

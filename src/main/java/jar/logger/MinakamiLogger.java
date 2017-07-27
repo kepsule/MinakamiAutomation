@@ -8,10 +8,10 @@ import org.slf4j.LoggerFactory;
  * @author Keisuke
  *
  */
-public class Logging {
+public class MinakamiLogger {
 
 	private static final Logger logger =
-			LoggerFactory.getLogger(Logging.class);
+			LoggerFactory.getLogger(MinakamiLogger.class);
 
 	public static void info(String message) {
 		logger.info(message);
@@ -21,6 +21,9 @@ public class Logging {
 	}
 	public static void error(String message) {
 		logger.error(message);
+	}
+	public static void error(String message, Throwable t) {
+		logger.error(message, t);
 	}
 	public static void trace(String message) {
 		logger.trace(message);

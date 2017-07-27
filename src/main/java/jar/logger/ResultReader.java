@@ -10,23 +10,33 @@ import org.apache.commons.collections4.map.HashedMap;
 import io.netty.util.internal.shaded.org.jctools.queues.MessagePassingQueue.Consumer;
 import jar.enums.ConditionEnum;
 
+/** 結果読み取り */
 public class ResultReader {
 
-	public Map<ConditionEnum, Integer> readResult() throws IOException {
+	/** 読み込み対象ファイル */
+	private static final String readFile = "testresult.txt";
 
-		Map<ConditionEnum, Integer> map = new HashedMap<>();
-		map.put(ConditionEnum.SUCCESS, 0);
-		map.put(ConditionEnum.FAILED, 0);
+	/** Mapで成功数、失敗数をカウントする */
+	public Map<String, Integer> readResult() throws IOException {
 
-		Consumer<ConditionEnum> increment = ce -> map.replace(ce, map.get(ce) + 1);
+		/* keyはConditionEnumの文字列とする */
+		Map<String, Integer> map = new HashedMap<>();
+		map.put(ConditionEnum.SUCCESS.name(), 0);
+		map.put(ConditionEnum.FAILED.name(), 0);
 
+		/* カウント操作を定義 */
+		Consumer<String> increment =
+				condition -> map.replace(condition, map.get(condition) + 1);
+
+				/* 一行ずつカウントし、カウント数をMapに再格納する
+				 * ConditionEnumにない文字列は対象外 */
 		try (BufferedReader br =
-				new BufferedReader(new FileReader("testresult.txt"))) {
+				new BufferedReader(new FileReader(readFile))) {
 
-			br.lines().forEach(
-					line ->
-					increment.accept(ConditionEnum.valueOf(line)));
+			br.lines().filter(line -> map.containsKey(line))
+				.forEach(line -> increment.accept(line));
 		}
+
 		return map;
 	}
 }

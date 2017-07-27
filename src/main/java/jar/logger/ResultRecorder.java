@@ -3,6 +3,9 @@ package jar.logger;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Path;
+
+import org.apache.poi.ss.usermodel.Sheet;
 
 import jar.enums.ConditionEnum;
 
@@ -22,11 +25,12 @@ public class ResultRecorder {
 	}
 
 	/** 結果ファイル追記 */
-	public void resultRecord(ConditionEnum ce) throws IOException {
+	public void resultRecord(Path path, Sheet sheet, ConditionEnum ce) throws IOException {
 
 		try (BufferedWriter bw =
 				new BufferedWriter(new FileWriter("testresult.txt", true))) {
-			bw.write(ce.name());
+			bw.write(
+					 path.toString() + " " + sheet.getSheetName() + "\n" + ce.name());
 			bw.newLine();
 		}
 	}

@@ -6,7 +6,7 @@ import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
 import jar.controller.AppController;
-import jar.logger.Logging;
+import jar.logger.MinakamiLogger;
 import jar.logger.ResultRecorder;
 import jar.notification.SlackNotifier;
 import jar.util.AppException;
@@ -45,7 +45,7 @@ public class App {
 				});
 
 		/* 結果のフィードバック */
-		if (exitCode == 0) { Logging.info("success");}
+		if (exitCode == 0) { MinakamiLogger.info("all test success");}
 		try {
 			SlackNotifier.getInstance().notifyBySlack();
 		} catch (IOException e) {
@@ -58,11 +58,11 @@ public class App {
 	public static final Consumer<Throwable> errHandling =
 		t -> {
 			exitCode = 1;
-			Logging.error(t.getMessage());
+			MinakamiLogger.error(t.getMessage(), t);
+
 			if (t instanceof AppException) {
-				Logging.error(((AppException)t).getErrMessage.get());
-				Logging.error(((AppException)t).getOperationData.get());
-			}
-			t.printStackTrace();
+				MinakamiLogger.error(((AppException)t).getErrMessage.get());
+				MinakamiLogger.error(((AppException)t).getOperationData.get());
+		}
 	};
 }
