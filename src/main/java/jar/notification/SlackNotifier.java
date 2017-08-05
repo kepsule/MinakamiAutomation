@@ -7,19 +7,21 @@ import org.riversun.slacklet.SlackletService;
 import jar.App;
 import jar.logger.ResultReader;
 
+/** Slack通知処理 */
 public class SlackNotifier {
 
 	private static final SlackNotifier sn = new SlackNotifier();
 	private SlackNotifier() {}
 	public static SlackNotifier getInstance() {return sn;}
 
-	/** Slackのトークン名を指定 */
+	/** Slackのトークンを指定 */
 	private static final String slackToken =
-			"xoxp-209416897524-209292195411-219579231879-0dd39dbf8d3fb4724cc662bf9180d24d";
+			"xoxp-209416897524-209292195411-222590603987-2c1108d6a211222b9478ac568b74ace7";
 
 	/** Slackのチャンネル名 */
 	private static final String channelName = "testresult";
 
+	/** Slackで通知する。 */
 	public void notifyBySlack() throws IOException {
 
 		SlackletService slackService =
@@ -28,18 +30,18 @@ public class SlackNotifier {
 			slackService.start();
 		} catch (IOException e) {
 			e.printStackTrace();
-			App.errHandling.accept(e);
+			App.errHandling(e);
 		}
 
 	    StringBuilder sb = new StringBuilder();
-	    new ResultReader().readResult()
+	    ResultReader.getInstance().readResult()
 	    	.forEach((k, v) -> sb.append(k + " : " + v + " "));
 	    slackService.sendMessageTo(channelName, sb.toString());
 
 	    try {
 			slackService.stop();
 		} catch (IOException e) {
-			App.errHandling.accept(e);
+			App.errHandling(e);
 		}
 	}
 }

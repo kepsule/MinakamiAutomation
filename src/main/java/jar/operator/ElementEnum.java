@@ -6,6 +6,11 @@ import org.openqa.selenium.By;
 
 import com.codeborne.selenide.SelenideElement;
 
+/**
+ * 要素Enum<p>
+ * 文字列と配列番号をSelenideElementに変換する処理を持つ。
+ * </p>
+ *   */
 public enum ElementEnum {
 
 	id {
@@ -65,9 +70,12 @@ public enum ElementEnum {
 	}
 	;
 
+	/** 要素の配列番号が渡されなかった場合、一つ目の要素を取得する。 */
 	public SelenideElement createTarget(String target) {
 		return createElement(target, 0);
-	};
+	}
+
+	/** SelenideElement取得処理 */
 	public abstract SelenideElement createElement(String target, int num);
 
 }

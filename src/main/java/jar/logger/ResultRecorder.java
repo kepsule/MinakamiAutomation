@@ -9,11 +9,12 @@ import org.apache.poi.ss.usermodel.Sheet;
 
 import jar.notification.ConditionEnum;
 
+/** 結果記録 */
 public class ResultRecorder {
 
-	private static final ResultRecorder rr = new ResultRecorder();
+	private static final ResultRecorder instance = new ResultRecorder();
 	private ResultRecorder() {}
-	public static final ResultRecorder getInstance() {return rr;}
+	public static final ResultRecorder getInstance() {return instance;}
 
 	/** 結果ファイル初期化 */
 	public void flushResultRecord() throws IOException {
@@ -25,7 +26,8 @@ public class ResultRecorder {
 	}
 
 	/** 結果ファイル追記 */
-	public void resultRecord(Path path, Sheet sheet, ConditionEnum ce) throws IOException {
+	public void resultRecord(Path path, Sheet sheet, ConditionEnum ce)
+			throws IOException {
 
 		try (BufferedWriter bw =
 				new BufferedWriter(new FileWriter("testresult.txt", true))) {

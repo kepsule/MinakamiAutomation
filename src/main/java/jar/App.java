@@ -2,10 +2,9 @@ package jar;
 
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
-import jar.controller.AppController;
+import jar.executor.FileExecutor;
 import jar.logger.MinakamiLogger;
 import jar.logger.ResultRecorder;
 import jar.notification.SlackNotifier;
@@ -29,7 +28,7 @@ public class App {
 		try {
 			ResultRecorder.getInstance().flushResultRecord();
 		} catch (IOException e) {
-			errHandling.accept(e);
+			errHandling(e);
 		}
 
 		/* Excel実行 */
@@ -37,32 +36,37 @@ public class App {
 				i -> 	{
 					try {
 
-						new AppController().execute(Paths.get(args[i]));
+						new FileExecutor().executeFile(Paths.get(args[i]));
 
 					} catch (Throwable e) {
-						errHandling.accept(e);
+						errHandling(e);
 					}
 				});
 
+		//TODO
 		/* 結果のフィードバック */
 		if (exitCode == 0) { MinakamiLogger.info("all test success");}
 		try {
 			SlackNotifier.getInstance().notifyBySlack();
 		} catch (IOException e) {
-			errHandling.accept(e);
+			errHandling(e);
 		}
 		System.exit(exitCode);
 	}
 
-	/** エラー時の処理 */
-	public static final Consumer<Throwable> errHandling =
-		t -> {
-			exitCode = 1;
-			MinakamiLogger.error(t.getMessage(), t);
+	/** エラー時の処理
+	 * <p>
+	 * エラートレースを出力し、exitCodeを変更する。
+	 *  </p>
+	 *  */
+	public static final void errHandling(Throwable t) {
 
-			if (t instanceof AppException) {
-				MinakamiLogger.error(((AppException)t).getErrMessage.get());
-				MinakamiLogger.error(((AppException)t).getOperationData.get());
+		exitCode = 1;
+		MinakamiLogger.error(t.getMessage(), t);
+
+		if (t instanceof AppException) {
+			MinakamiLogger.error(((AppException)t).getErrMessage());
+			MinakamiLogger.error(((AppException)t).getOperationData());
 		}
-	};
+	}
 }

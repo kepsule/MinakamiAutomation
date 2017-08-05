@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * ロガー
  * @see src/main/resources logback.xml
  * @author Keisuke
  *

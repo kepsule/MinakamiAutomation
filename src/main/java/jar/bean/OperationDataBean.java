@@ -3,6 +3,7 @@ package jar.bean;
 import jar.operator.ElementEnum;
 import jar.operator.OperationEnum;
 
+/** 操作内容Bean */
 public class OperationDataBean extends CommonDataBean {
 
 	/** 操作 */

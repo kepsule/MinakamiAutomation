@@ -7,13 +7,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
-/** DB操作クラス<br>
- * Singleton */
-public class DbConnector {
+/** DB操作 */
+public class DbOperator {
 
-	private DbConnector(){}
-	private static DbConnector connector = new DbConnector();
-	public static DbConnector getInstance() {
+	private DbOperator(){}
+	private static DbOperator connector = new DbOperator();
+	public static DbOperator getInstance() {
 		return connector;
 	}
 

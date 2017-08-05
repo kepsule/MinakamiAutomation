@@ -8,40 +8,44 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.function.Function;
 
 import com.codeborne.selenide.SelenideElement;
 
 import jar.bean.CommonDataBean;
 import jar.bean.OperationDataBean;
-import jar.db.DbConnector;
+import jar.db.DbOperator;
 import jar.util.AppException;
 import jar.util.AssertException;
 
+/** 操作Enum
+ *  <p>
+ *  Excelのインプットに対応する処理を定義する。
+ *  </p>
+ *  */
 public enum OperationEnum {
 
 	CLICK {
 		@Override
 		public void operate(OperationDataBean odb) throws AppException {
-			getElement.apply(odb).click();
+			getElement(odb).click();
 		}
 	},
 	DOUBLE_CLICK {
 		@Override
 		public void operate(OperationDataBean odb) throws AppException {
-			getElement.apply(odb).doubleClick();
+			getElement(odb).doubleClick();
 		}
 	},
 	SEND_KEYS {
 		@Override
 		public void operate(OperationDataBean odb) throws AppException {
-			getElement.apply(odb).sendKeys(odb.getInputData());
+			getElement(odb).sendKeys(odb.getInputData());
 		}
 	},
 	PRESS_ENTER {
 		@Override
 		public void operate(OperationDataBean odb) throws AppException {
-			getElement.apply(odb).pressEnter();
+			getElement(odb).pressEnter();
 		}
 	},
 	END {
@@ -53,10 +57,10 @@ public enum OperationEnum {
 		@Override
 		public void operate(OperationDataBean odb) throws AppException {
 			/* inputと一致していなければ例外スロー */
-			if (!odb.getInputData().equals(getElement.apply(odb).val())) {
+			if (!odb.getInputData().equals(getElement(odb).val())) {
 				throw new AssertException(
 						"Expected is : " + odb.getInputData()
-						+ "\nBut actual is :" + getElement.apply(odb).val());
+						+ "\nBut actual is :" + getElement(odb).val());
 			}
 		}
 	},
@@ -65,7 +69,7 @@ public enum OperationEnum {
 		public void operate(OperationDataBean odb) throws AppException {
 
 			/* inputと一致していなければ例外スロー */
-			if (!getElement.apply(odb).exists()) {
+			if (!getElement(odb).exists()) {
 				throw new AssertException(
 						"element is Not Exist");
 			}
@@ -76,7 +80,7 @@ public enum OperationEnum {
 		public void operate(OperationDataBean odb) throws AppException {
 
 			/* inputと一致していれば例外スロー */
-			if (getElement.apply(odb).exists()) {
+			if (getElement(odb).exists()) {
 				throw new AssertException(
 						"element is Exist");
 			}
@@ -89,23 +93,25 @@ public enum OperationEnum {
 		public void operate(OperationDataBean odb) throws AppException {
 
 			/* inputと一致していなければ例外スロー */
-			if (!odb.getInputData().equals(getElement.apply(odb).getText())) {
+			if (!odb.getInputData().equals(getElement(odb).getText())) {
 				throw new AssertException(
 						"Expected is : " + odb.getInputData()
-						+ "\nBut actual is :" + getElement.apply(odb).val());
+						+ "\nBut actual is :" + getElement(odb).val());
 			}
 		}
 	},
+	/** 要素のエビデンス取得 */
 	ELEMENT_CAPTURE {
 
 		@Override
 		public void operate(OperationDataBean odb) throws AppException {
 
-			getElement.apply(odb).screenshot().renameTo(
+			getElement(odb).screenshot().renameTo(
 					CommonDataBean.getEvidenceFolder().resolve("IMAGE" +
 							CommonDataBean.getEvidenceNumAndIncrement() + ".png").toFile());
 		}
 	},
+	/** 画像ハードコピー */
 	IMAGE_CAPTURE {
 
 		/** デフォルトだとbuiled/test/resources直下
@@ -126,13 +132,13 @@ public enum OperationEnum {
 			}
 		}
 	},
+	/** SQL実行 */
 	EXECUTE_SQL {
 		@Override
 		public void operate(OperationDataBean odb) throws AppException {
 
-			/* SQL実行 */
 			try {
-				DbConnector.getInstance().execute(
+				DbOperator.getInstance().execute(
 					CommonDataBean.getDbPath(), CommonDataBean.getDbProps(),
 					odb.getInputData());
 			} catch (SQLException e) {
@@ -140,12 +146,14 @@ public enum OperationEnum {
 			}
 		}
 	},
+
+	/** SELECTし、レコードのデータをテスト */
 	EXECUTE_SQL_AND_ASSERT{
 		@Override
 		public void operate(OperationDataBean odb) throws AppException {
 
 			/* DBに接続 */
-			try (ResultSet rs = DbConnector.getInstance().getRs(
+			try (ResultSet rs = DbOperator.getInstance().getRs(
 					CommonDataBean.getDbPath(), CommonDataBean.getDbProps(),
 					odb.getInputData())) {
 				rs.next();
@@ -153,19 +161,21 @@ public enum OperationEnum {
 						rs.getString(odb.getTargetNum()))) {
 					throw new AssertException(
 							"Expected is : " + odb.getInputData()
-							+ "\nBut actual is :" + getElement.apply(odb).val());
+							+ "\nBut actual is :" + getElement(odb).val());
 				}
 			} catch (SQLException e) {
 				throw new AppException("SQLException", this.name() + "failed");
 			}
 		}
 	},
+
+	/** Selectし、該当レコードがないことをテスト */
 	EXECUTE_SQL_AND_ASSERT_NO_RECORD{
 		@Override
 		public void operate(OperationDataBean odb) throws AppException {
 
 			/* DBに接続 */
-			try (ResultSet rs = DbConnector.getInstance().getRs(
+			try (ResultSet rs = DbOperator.getInstance().getRs(
 					CommonDataBean.getDbPath(), CommonDataBean.getDbProps(),
 					odb.getInputData())) {
 				if (rs.next()) {
@@ -179,8 +189,12 @@ public enum OperationEnum {
 	;
 
 	/** Element取得メソッド */
-	private static Function<OperationDataBean, SelenideElement> getElement =
-			odb -> odb.getElementEnum().createElement(
+	private static SelenideElement getElement(OperationDataBean odb) {
+		return
+				odb.getElementEnum().createElement(
 					odb.getElementName(), odb.getTargetNum());
+	}
+
+	/** 操作定義 */
 	public abstract void operate(OperationDataBean odb) throws AppException;
 }

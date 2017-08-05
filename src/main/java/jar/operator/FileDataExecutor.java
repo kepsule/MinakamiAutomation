@@ -8,10 +8,14 @@ import jar.App;
 import jar.bean.OperationDataBean;
 import jar.util.AppException;
 
+/** 解析済みデータ実行 */
 public class FileDataExecutor {
 
-	public void fileDataExecute(List<OperationDataBean> odbList) throws InterruptedException, AppException {
+	/** ファイル解析後のデータを受け取り、実行処理を呼び出す。 */
+	public void fileDataExecute(List<OperationDataBean> odbList)
+			throws InterruptedException, AppException {
 
+		/* データがない場合、処理終了 */
 		if (odbList == null || odbList.isEmpty()) {
 			return;
 		}
@@ -23,18 +27,22 @@ public class FileDataExecutor {
 		open(odbList.get(0).getStartUrl());
 
 		/* 操作 */
-		odbList.iterator().forEachRemaining(odb -> {
-			/* 操作処理 */
-			try {
-				odb.getOperationEnum().operate(odb);
+		odbList.iterator().forEachRemaining(
+			odb -> {
+				try {
 
-				/* アプリケーション定義例外発生時 */
-			} catch (AppException e) {
+					/* 操作処理 */
+					odb.getOperationEnum().operate(odb);
 
-				e.setOperationDataBean(odb);
-				App.errHandling.accept(e);
-			}
-		});
+					/* アプリケーション定義例外発生時
+					 * 失敗した処理内容をセットし、共通処理を呼び出す */
+				} catch (AppException e) {
+
+					e.setOperationDataBean(odb);
+					App.errHandling(e);
+				}
+			});
+
 		close();
 	}
 }

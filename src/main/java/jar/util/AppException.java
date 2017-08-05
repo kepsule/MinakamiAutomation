@@ -1,7 +1,5 @@
 package jar.util;
 
-import java.util.function.Supplier;
-
 import jar.bean.OperationDataBean;
 
 /**
@@ -16,35 +14,32 @@ public class AppException extends Exception {
 	private String message;
 	private OperationDataBean odb;
 
-	public void setOperationDataBean(OperationDataBean odb) {
-		this.odb = odb;
-	}
 	public AppException(){}
 	public AppException(String name){
 		this.name = name;
-	}
-	public AppException(String name, OperationDataBean odb) {
-		this.name = name;
-		this.odb = odb;
 	}
 	public AppException(String name, String message) {
 		this.name = name;
 		this.message = message;
 	}
-	public AppException(String name, String message, OperationDataBean odb) {
-		this.name = name;
-		this.message = message;
+
+	public void setOperationDataBean(OperationDataBean odb) {
 		this.odb = odb;
 	}
 
-	public Supplier<String> getErrMessage =
-		() -> "throws：" + name + "\nDetail：" + message;
+	/** エラーメッセージ取得 */
+	public String getErrMessage() {
+		return "throws：" + name + "\nDetail：" + message;
+	}
 
-	public Supplier<String> getOperationData =
-		() ->
-			"elementName is :" +
+	/** 処理内容取得 */
+	public String getOperationData() {
+
+		return
+		"elementName is :" +
 			odb.getElementName() +
 			"\nelementTag is : " +
 			odb.getElementEnum().name();
+	}
 
 }

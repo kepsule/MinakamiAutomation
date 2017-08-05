@@ -5,6 +5,7 @@ import java.util.Properties;
 
 import jar.connector.BrowserEnum;
 
+/** 共通データBean */
 public class CommonDataBean {
 
 	/** Excelファイルパス */
@@ -82,6 +83,7 @@ public class CommonDataBean {
 		return evidenceFolder;
 	}
 
+	/** エビデンスの連番を取得し、インクリメントする */
 	public static String getEvidenceNumAndIncrement(){
 		return String.format("%04d", evidenceNum++);
 	}

@@ -12,6 +12,8 @@ public enum BrowserEnum {
 		this.con = con;
 	}
 
+	/** 接続処理<p>
+	 * 接続の際の共通処理、各ブラウザの接続処理呼び出し</p> */
 	public void connect(){
 		con.setUp();
 	}

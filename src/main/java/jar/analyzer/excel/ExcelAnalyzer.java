@@ -1,4 +1,4 @@
-package jar.analyzer;
+package jar.analyzer.excel;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -22,10 +22,11 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import jar.bean.CommonDataBean;
 import jar.bean.OperationDataBean;
 import jar.connector.BrowserEnum;
-import jar.constant.ExcelConst;
 import jar.operator.ElementEnum;
 import jar.operator.OperationEnum;
+import jar.util.FileAnalyzerException;
 
+/** Excel解析 */
 public class ExcelAnalyzer {
 
 	/** Pathで与えられたExcelファイルのSheet名をIteratorで返却する。 */
@@ -38,10 +39,11 @@ public class ExcelAnalyzer {
 						new FileInputStream(excelPath.toFile())).sheetIterator();
 	}
 
-	/** Excelファイルを解析し、テスト実行データのBeanを生成する。 */
+	/** Excelファイルを解析し、テスト実行データのBeanを生成する。
+	 * @throws FileAnalyzerException */
 	public List<OperationDataBean> analyzeExcel(Path excelPath, String sheetName)
 				throws EncryptedDocumentException, InvalidFormatException,
-						FileNotFoundException, IOException {
+						FileNotFoundException, IOException, FileAnalyzerException {
 
 		/* PathからExcelデータに変換 Sheetを指定 */
 		Workbook wb = WorkbookFactory.create(
@@ -62,6 +64,10 @@ public class ExcelAnalyzer {
 					ExcelDataEnum.URL_CELL.getRow())
 						.getCell(ExcelDataEnum.URL_CELL.getCol())
 							.getStringCellValue();
+
+		/* cellのnull check処理 */
+		Function<Cell, String> getCellValueAsString =
+			cell -> cell == null ? "" : cell.getStringCellValue();
 
 		/* エビデンス格納パス デフォルトはカレントディレクトリ */
 		Path evidenceFolder;
@@ -110,12 +116,12 @@ public class ExcelAnalyzer {
 						evidenceFolder, dbPath, dbUser, dbPassword);
 
 		/* 操作内容をOperationDataBeanに詰め、FileDataBeanに設定 */
-		int colCounter = ExcelDataEnum.START_CELL.getRow();
+		int rowCounter = ExcelDataEnum.START_ROW.getRow();
 
 		/* 最初のCellを取得 */
 		Cell cell =
-				sheet.getRow(ExcelDataEnum.START_CELL.getRow()).getCell(
-				colCounter, Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
+				sheet.getRow(ExcelDataEnum.START_ROW.getRow()).getCell(
+				rowCounter, Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
 
 		List<OperationDataBean> odbList = new ArrayList<>();
 
@@ -129,15 +135,15 @@ public class ExcelAnalyzer {
 			/* 操作 */
 			OperationEnum oe =
 				OperationEnum.valueOf(
-					sheet.getRow(colCounter)
-						.getCell(ExcelConst.OPERATION_CELL,
+					sheet.getRow(rowCounter)
+						.getCell(ExcelDataEnum.OPERATION_COL.getCol(),
 								Row.MissingCellPolicy.CREATE_NULL_AS_BLANK)
 							.getStringCellValue());
 
 			/* 要素のタイプ */
 			ElementEnum elm = null;
-			String element = sheet.getRow(colCounter)
-					.getCell(ExcelConst.TAG_CELL,
+			String element = sheet.getRow(rowCounter)
+					.getCell(ExcelDataEnum.TAG_COL.getCol(),
 							Row.MissingCellPolicy.CREATE_NULL_AS_BLANK)
 						.getStringCellValue();
 			if ("".equals(element)) {
@@ -148,8 +154,8 @@ public class ExcelAnalyzer {
 
 			/* 要素名 */
 			Cell nameCell =
-				sheet.getRow(colCounter)
-						.getCell(ExcelConst.NAME_CELL,
+				sheet.getRow(rowCounter)
+						.getCell(ExcelDataEnum.NAME_COL.getCol(),
 								Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
 			String name;
 			if (CellType.NUMERIC == cell.getCellTypeEnum()) {
@@ -158,47 +164,44 @@ public class ExcelAnalyzer {
 				name = nameCell.getStringCellValue();
 			}
 
+			/* NumericCellのcheck */
+			Function<Cell, Integer> numericChk =
+				targetCell ->
+					CellType.NUMERIC == targetCell.getCellTypeEnum() ?
+							(int) targetCell.getNumericCellValue() :
+								CellType.BLANK == targetCell.getCellTypeEnum() ?
+									0 :	Integer.valueOf(targetCell.getStringCellValue());
+
 			/* 要素の配列番号 */
 			int num = 0;
 			Cell numCell =
-				sheet.getRow(colCounter)
-						.getCell(ExcelConst.NUM_CELL,
+				sheet.getRow(rowCounter)
+						.getCell(ExcelDataEnum.NUM_COL.getCol(),
 								Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
 			num = numericChk.apply(numCell);
 
 			/* 入力値 */
 			String input =
-				sheet.getRow(colCounter)
-						.getCell(ExcelConst.INPUT_CELL,
+				sheet.getRow(rowCounter)
+						.getCell(ExcelDataEnum.INPUT_COL.getCol(),
 								Row.MissingCellPolicy.CREATE_NULL_AS_BLANK)
 						.getStringCellValue();
 
 			/* 操作Beanを生成し、次の行へ */
 			odbList.add(new OperationDataBean(cdb, oe, elm, name, num, input));
-			colCounter++;
-
-			Row row = sheet.getRow(colCounter);
+			rowCounter++;
+			Row row = sheet.getRow(rowCounter);
 			if (row == null) {
 				break;
 			}
 
+			/* 次の行のセルを取得 */
 			cell = row
-					.getCell(ExcelConst.OPERATION_CELL,
+					.getCell(ExcelDataEnum.OPERATION_COL.getCol(),
 							Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
 		}
 
 		return odbList;
 	}
 
-	/** cellのnull check */
-	private Function<Cell, String> getCellValueAsString =
-		cell -> cell == null ? "" : cell.getStringCellValue();
-
-	/** NumericCellのcheck */
-	private Function<Cell, Integer> numericChk =
-		cell ->
-			CellType.NUMERIC == cell.getCellTypeEnum() ?
-					(int) cell.getNumericCellValue() :
-						CellType.BLANK == cell.getCellTypeEnum() ?
-							0 :	Integer.valueOf(cell.getStringCellValue());
 }

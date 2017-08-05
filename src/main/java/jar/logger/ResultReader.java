@@ -13,6 +13,10 @@ import jar.notification.ConditionEnum;
 /** 結果読み取り */
 public class ResultReader {
 
+	private static final ResultReader instance = new ResultReader();
+	private ResultReader() {}
+	public static final ResultReader getInstance() {return instance;}
+
 	/** 読み込み対象ファイル */
 	private static final String readFile = "testresult.txt";
 

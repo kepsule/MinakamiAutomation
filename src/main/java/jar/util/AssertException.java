@@ -1,13 +1,12 @@
 package jar.util;
 
+/** 取得データが想定結果と異なっていた場合の例外 */
 public class AssertException extends AppException {
 
-	private static final String errName = "AssertionError";
-
 	public AssertException(){
-		super(errName);
+		super(ErrorCodeEnum.AssertionError.name());
 	}
 	public AssertException(String message){
-		super(errName, message);
+		super(ErrorCodeEnum.AssertionError.name(), message);
 	}
 }
