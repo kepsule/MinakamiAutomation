@@ -1,2 +1,4 @@
 *.log
 *Test.java
+*.class
+*.png
