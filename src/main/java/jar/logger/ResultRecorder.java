@@ -26,6 +26,17 @@ public class ResultRecorder {
 	}
 
 	/** 結果ファイル追記 */
+	public void resultRecord(String content)
+			throws IOException {
+
+		try (BufferedWriter bw =
+				new BufferedWriter(new FileWriter("testresult.txt", true))) {
+			bw.write(content);
+			bw.newLine();
+		}
+	}
+
+	/** 結果ファイル追記 */
 	public void resultRecord(Path path, Sheet sheet, ConditionEnum ce)
 			throws IOException {
 

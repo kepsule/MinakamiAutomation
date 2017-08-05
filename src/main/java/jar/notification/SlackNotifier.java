@@ -10,13 +10,13 @@ import jar.logger.ResultReader;
 /** Slack通知処理 */
 public class SlackNotifier {
 
-	private static final SlackNotifier sn = new SlackNotifier();
+	private static final SlackNotifier instance = new SlackNotifier();
 	private SlackNotifier() {}
-	public static SlackNotifier getInstance() {return sn;}
+	public static SlackNotifier getInstance() {return instance;}
 
 	/** Slackのトークンを指定 */
 	private static final String slackToken =
-			"xoxp-209416897524-209292195411-222590603987-2c1108d6a211222b9478ac568b74ace7";
+			"xoxp-209416897524-209292195411-223791639047-9305b632ba04d36f4650f79e66dcafd3";
 
 	/** Slackのチャンネル名 */
 	private static final String channelName = "testresult";

@@ -19,6 +19,10 @@ public class App {
 	 * 0以外は例外発生とする。 */
 	private static int exitCode = 0;
 
+	/** 成功時のメッセージ */
+	private static final String successMessage =
+			"all test success";
+
 	/** mainメソッド。
 	 *  引数にExcelのファイル名（の配列）を受けとり、
 	 *  処理を実行する。。*/
@@ -43,10 +47,13 @@ public class App {
 					}
 				});
 
-		//TODO
-		/* 結果のフィードバック */
-		if (exitCode == 0) { MinakamiLogger.info("all test success");}
+		/* 結果のフィードバック
+		 * ロガー書き込み及び通知 */
 		try {
+			if (exitCode == 0) {
+				MinakamiLogger.info(successMessage);
+				ResultRecorder.getInstance().resultRecord(successMessage);
+			}
 			SlackNotifier.getInstance().notifyBySlack();
 		} catch (IOException e) {
 			errHandling(e);

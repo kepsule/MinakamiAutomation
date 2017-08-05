@@ -130,7 +130,7 @@ public class ExcelAnalyzer {
 				!(
 				"".equals(cell.getStringCellValue())
 				||
-				ExcelConst.END_POINT.equals(cell.getStringCellValue()))) {
+				OperationEnum.END.name().equals(cell.getStringCellValue()))) {
 
 			/* 操作 */
 			OperationEnum oe =
