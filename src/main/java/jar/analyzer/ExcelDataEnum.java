@@ -1,4 +1,4 @@
-package jar.enums;
+package jar.analyzer;
 
 public enum ExcelDataEnum {
 

@@ -3,7 +3,7 @@ package jar.bean;
 import java.nio.file.Path;
 import java.util.Properties;
 
-import jar.enums.BrowserEnum;
+import jar.connector.BrowserEnum;
 
 public class CommonDataBean {
 

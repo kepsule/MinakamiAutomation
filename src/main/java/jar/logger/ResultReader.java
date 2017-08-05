@@ -8,7 +8,7 @@ import java.util.Map;
 import org.apache.commons.collections4.map.HashedMap;
 
 import io.netty.util.internal.shaded.org.jctools.queues.MessagePassingQueue.Consumer;
-import jar.enums.ConditionEnum;
+import jar.notification.ConditionEnum;
 
 /** 結果読み取り */
 public class ResultReader {

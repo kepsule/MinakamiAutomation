@@ -1,7 +1,4 @@
-package jar.enums;
-
-import jar.connector.BrowserConnector;
-import jar.connector.FireFoxConnector;
+package jar.connector;
 
 public enum BrowserEnum {
 

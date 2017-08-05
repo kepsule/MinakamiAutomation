@@ -21,11 +21,10 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 import jar.bean.CommonDataBean;
 import jar.bean.OperationDataBean;
+import jar.connector.BrowserEnum;
 import jar.constant.ExcelConst;
-import jar.enums.BrowserEnum;
-import jar.enums.ElementEnum;
-import jar.enums.ExcelDataEnum;
-import jar.enums.OperationEnum;
+import jar.operator.ElementEnum;
+import jar.operator.OperationEnum;
 
 public class ExcelAnalyzer {
 

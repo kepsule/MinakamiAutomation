@@ -7,7 +7,7 @@ import java.nio.file.Path;
 
 import org.apache.poi.ss.usermodel.Sheet;
 
-import jar.enums.ConditionEnum;
+import jar.notification.ConditionEnum;
 
 public class ResultRecorder {
 

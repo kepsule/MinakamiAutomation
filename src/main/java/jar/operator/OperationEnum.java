@@ -1,4 +1,4 @@
-package jar.enums;
+package jar.operator;
 
 import static com.codeborne.selenide.Selenide.*;
 

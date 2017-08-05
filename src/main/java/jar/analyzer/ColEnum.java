@@ -1,4 +1,4 @@
-package jar.enums;
+package jar.analyzer;
 
 /** Excelの列対応Enum */
 public enum ColEnum {

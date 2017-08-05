@@ -1,4 +1,4 @@
-package jar.enums;
+package jar.notification;
 
 /** SLACKで使用するステータス */
 public enum ConditionEnum {

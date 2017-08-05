@@ -23,10 +23,10 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="lib/poi-bin-3.16-20170419/poi-3.16/poi-3.16.jar" sourcepath="C:/Users/Keisuke/AppData/Local/Temp/decompiler/source/poi-3.16-sources-1499488123053.jar"/>
+	<classpathentry kind="lib" path="lib/poi-bin-3.16-20170419/poi-3.16/poi-3.16.jar"/>
 	<classpathentry kind="lib" path="lib/poi-bin-3.16-20170419/poi-3.16/poi-examples-3.16.jar"/>
 	<classpathentry kind="lib" path="lib/poi-bin-3.16-20170419/poi-3.16/poi-excelant-3.16.jar"/>
-	<classpathentry kind="lib" path="lib/poi-bin-3.16-20170419/poi-3.16/poi-ooxml-3.16.jar" sourcepath="C:/Users/Keisuke/AppData/Local/Temp/decompiler/source/poi-ooxml-3.16-sources.jar"/>
+	<classpathentry kind="lib" path="lib/poi-bin-3.16-20170419/poi-3.16/poi-ooxml-3.16.jar"/>
 	<classpathentry kind="lib" path="lib/poi-bin-3.16-20170419/poi-3.16/poi-ooxml-schemas-3.16.jar"/>
 	<classpathentry kind="lib" path="lib/poi-bin-3.16-20170419/poi-3.16/poi-scratchpad-3.16.jar"/>
 	<classpathentry kind="lib" path="lib/poi-bin-3.16-20170419/poi-3.16/ooxml-lib/curvesapi-1.04.jar"/>

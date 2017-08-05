@@ -2,7 +2,7 @@
 <!DOCTYPE logback>
 <configuration>
 	<appender name="FILE" class="ch.qos.logback.core.FileAppender">
-		<file>logback-sample.log</file>
+		<file>MinakamiLog.log</file>
 		<encoder>
 			<charset>UTF-8</charset>
 			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
@@ -11,5 +11,6 @@
 
 	<root>
 		<appender-ref ref="FILE" />
+	    <level value ="info" />
 	</root>
 </configuration>

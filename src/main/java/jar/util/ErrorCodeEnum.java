@@ -1,4 +1,4 @@
-package jar.enums;
+package jar.util;
 
 public enum ErrorCodeEnum {
 

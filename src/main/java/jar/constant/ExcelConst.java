@@ -1,6 +1,6 @@
 package jar.constant;
 
-import jar.enums.ColEnum;
+import jar.analyzer.ColEnum;
 
 /** Excelファイルで読み取りたいデータの対象行、対象列、セルを定義 */
 public class ExcelConst {

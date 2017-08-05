@@ -15,9 +15,9 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import jar.App;
 import jar.analyzer.ExcelAnalyzer;
 import jar.bean.OperationDataBean;
-import jar.enums.ConditionEnum;
 import jar.logger.MinakamiLogger;
 import jar.logger.ResultRecorder;
+import jar.notification.ConditionEnum;
 import jar.operator.FileDataExecutor;
 import jar.util.AppException;
 
@@ -35,8 +35,8 @@ public class AppController {
 				sheet -> {
 
 					try {
-						/* パスのファイルからBeanに変換 */
 
+						/* パスのファイルからBeanに変換 */
 						MinakamiLogger.info("実行開始：" + testDataPath.toString() + sheet.getSheetName());
 						List<OperationDataBean> odbList =
 								new ExcelAnalyzer().analyzeExcel(testDataPath, sheet.getSheetName());

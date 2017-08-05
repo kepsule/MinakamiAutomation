@@ -1,7 +1,7 @@
 package jar.bean;
 
-import jar.enums.ElementEnum;
-import jar.enums.OperationEnum;
+import jar.operator.ElementEnum;
+import jar.operator.OperationEnum;
 
 public class OperationDataBean extends CommonDataBean {
 
