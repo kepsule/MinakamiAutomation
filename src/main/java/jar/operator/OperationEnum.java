@@ -191,8 +191,8 @@ public enum OperationEnum {
 	/** Element取得メソッド */
 	private static SelenideElement getElement(OperationDataBean odb) {
 		return
-				odb.getElementEnum().createElement(
-					odb.getElementName(), odb.getTargetNum());
+			odb.getElementEnum().createElement(
+				odb.getElementName(), odb.getTargetNum());
 	}
 
 	/** 操作定義 */

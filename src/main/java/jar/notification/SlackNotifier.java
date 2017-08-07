@@ -14,18 +14,11 @@ public class SlackNotifier {
 	private SlackNotifier() {}
 	public static SlackNotifier getInstance() {return instance;}
 
-	/** Slackのトークンを指定 */
-	private static final String slackToken =
-			"xoxp-209416897524-209292195411-223791639047-9305b632ba04d36f4650f79e66dcafd3";
-
-	/** Slackのチャンネル名 */
-	private static final String channelName = "testresult";
-
 	/** Slackで通知する。 */
 	public void notifyBySlack() throws IOException {
 
 		SlackletService slackService =
-				new SlackletService(slackToken);
+				new SlackletService(NotifierConst.slackToken);
 	    try {
 			slackService.start();
 		} catch (IOException e) {
@@ -36,7 +29,7 @@ public class SlackNotifier {
 	    StringBuilder sb = new StringBuilder();
 	    ResultReader.getInstance().readResult()
 	    	.forEach((k, v) -> sb.append(k + " : " + v + " "));
-	    slackService.sendMessageTo(channelName, sb.toString());
+	    slackService.sendMessageTo(NotifierConst.channelName, sb.toString());
 
 	    try {
 			slackService.stop();

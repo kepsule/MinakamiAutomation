@@ -36,30 +36,33 @@ public class FileExecutor {
 
 		/* 全シートを順次実行 */
 		iter.forEachRemaining(
-				sheet -> {
+
+			sheet -> {
+
+				try {
+
+					/* パスのファイルからBeanに変換 */
+					MinakamiLogger.info(
+							"実行開始：" + testDataPath.toString() + sheet.getSheetName());
+					List<OperationDataBean> odbList =
+							new ExcelAnalyzer().analyzeExcel(testDataPath, sheet.getSheetName());
+					new FileDataExecutor().fileDataExecute(odbList);
+					ResultRecorder.getInstance().resultRecord(
+							testDataPath, sheet, ConditionEnum.SUCCESS);
+
+				} catch (Throwable t) {
+
+					/* エラー発生時、トレースを出力し次のシートへ */
 					try {
-
-						/* パスのファイルからBeanに変換 */
-						MinakamiLogger.info(
-								"実行開始：" + testDataPath.toString() + sheet.getSheetName());
-						List<OperationDataBean> odbList =
-								new ExcelAnalyzer().analyzeExcel(testDataPath, sheet.getSheetName());
-						new FileDataExecutor().fileDataExecute(odbList);
 						ResultRecorder.getInstance().resultRecord(
-								testDataPath, sheet, ConditionEnum.SUCCESS);
+								testDataPath, sheet, ConditionEnum.FAILED);
 
-					} catch (Throwable t) {
-
-						/* エラー発生時、トレースを出力し次のシートへ */
-						try {
-							ResultRecorder.getInstance().resultRecord(
-									testDataPath, sheet, ConditionEnum.FAILED);
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-						App.errHandling(t);
+					} catch (IOException e) {
+						e.printStackTrace();
 					}
-					MinakamiLogger.info("実行開終了：" + testDataPath.toString() + sheet.getSheetName());
+					App.errHandling(t);
+				}
+				MinakamiLogger.info("実行開終了：" + testDataPath.toString() + sheet.getSheetName());
 			});
 
 	}

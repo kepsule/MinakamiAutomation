@@ -32,8 +32,8 @@ public class ResultReader {
 		Consumer<String> increment =
 				condition -> map.replace(condition, map.get(condition) + 1);
 
-				/* 一行ずつカウントし、カウント数をMapに再格納する
-				 * ConditionEnumにない文字列は対象外 */
+			/* 一行ずつカウントし、カウント数をMapに再格納する
+			 * ConditionEnumにない文字列は対象外 */
 		try (BufferedReader br =
 				new BufferedReader(new FileReader(readFile))) {
 
