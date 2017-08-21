@@ -27,7 +27,8 @@ public class FileExecutor {
 	/** Excelファイル実行 */
 	public void executeFile(Path testDataPath)
 			throws EncryptedDocumentException, InvalidFormatException,
-					FileNotFoundException, IOException, InterruptedException, AppException {
+					FileNotFoundException, IOException,
+					InterruptedException, AppException {
 
 		/* SheetにのIteratorに変換 */
 		Iterator<Sheet> iter =

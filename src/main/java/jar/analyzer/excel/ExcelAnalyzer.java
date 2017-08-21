@@ -31,7 +31,8 @@ public class ExcelAnalyzer {
 
 	/** Pathで与えられたExcelファイルのSheet名をIteratorで返却する。 */
 	public Iterator<Sheet> getSheetNameIterator(Path excelPath)
-			throws InvalidFormatException, EncryptedDocumentException, FileNotFoundException, IOException{
+			throws InvalidFormatException, EncryptedDocumentException,
+					FileNotFoundException, IOException{
 
 		/* PathからExcelデータに変換 */
 		return

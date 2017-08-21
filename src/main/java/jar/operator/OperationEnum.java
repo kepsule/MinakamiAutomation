@@ -2,6 +2,9 @@ package jar.operator;
 
 import static com.codeborne.selenide.Selenide.*;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -10,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.WebDriverRunner;
 
 import jar.bean.CommonDataBean;
 import jar.bean.OperationDataBean;
@@ -148,7 +152,7 @@ public enum OperationEnum {
 	},
 
 	/** SELECTし、レコードのデータをテスト */
-	EXECUTE_SQL_AND_ASSERT{
+	EXECUTE_SQL_AND_ASSERT {
 		@Override
 		public void operate(OperationDataBean odb) throws AppException {
 
@@ -170,7 +174,7 @@ public enum OperationEnum {
 	},
 
 	/** Selectし、該当レコードがないことをテスト */
-	EXECUTE_SQL_AND_ASSERT_NO_RECORD{
+	EXECUTE_SQL_AND_ASSERT_NO_RECORD {
 		@Override
 		public void operate(OperationDataBean odb) throws AppException {
 
@@ -185,6 +189,27 @@ public enum OperationEnum {
 				throw new AppException("SQLException", this.name() + "failed");
 			}
 		}
+	},
+	HTML_CAPTURE {
+
+		@Override
+		public void operate(OperationDataBean odb) throws AppException {
+
+			File output =
+					CommonDataBean.getEvidenceFolder().resolve("HTML" +
+					CommonDataBean.getEvidenceNumAndIncrement() + ".html").toFile();
+
+			try {
+				output.createNewFile();
+				try (BufferedWriter bw =
+					new BufferedWriter(new FileWriter(output, true))) {
+				bw.flush();
+				bw.write(WebDriverRunner.getWebDriver().getPageSource());
+			}} catch (IOException e) {
+				throw new AppException("IOException", "HTML failed");
+			}
+		}
+
 	}
 	;
 
