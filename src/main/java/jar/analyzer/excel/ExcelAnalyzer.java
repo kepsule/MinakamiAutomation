@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -166,27 +167,30 @@ public class ExcelAnalyzer {
 			}
 
 			/* NumericCellのcheck */
-			Function<Cell, Integer> numericChk =
-				targetCell ->
-					CellType.NUMERIC == targetCell.getCellTypeEnum() ?
-							(int) targetCell.getNumericCellValue() :
-								CellType.BLANK == targetCell.getCellTypeEnum() ?
-									0 :	Integer.valueOf(targetCell.getStringCellValue());
+			Predicate<Cell> isNumeric =
+					targetCell -> CellType.NUMERIC == targetCell.getCellTypeEnum();
 
-			/* 要素の配列番号 */
+			/* 要素の配列番号
+			 * ブランクなら0、文字列なら数値に変換して取得 */
 			int num = 0;
 			Cell numCell =
 				sheet.getRow(rowCounter)
 						.getCell(ExcelDataEnum.NUM_COL.getCol(),
 								Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
-			num = numericChk.apply(numCell);
+			num =  isNumeric.test(numCell) ?
+					(int) numCell.getNumericCellValue() :
+						CellType.BLANK == numCell.getCellTypeEnum() ?
+							0 :	Integer.valueOf(numCell.getStringCellValue());;
 
 			/* 入力値 */
-			String input =
+			Cell inputData =
 				sheet.getRow(rowCounter)
 						.getCell(ExcelDataEnum.INPUT_COL.getCol(),
-								Row.MissingCellPolicy.CREATE_NULL_AS_BLANK)
-						.getStringCellValue();
+								Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+			String input =
+					isNumeric.test(inputData) ?
+						String.valueOf(inputData.getNumericCellValue())	:
+							inputData.getStringCellValue();
 
 			/* 操作Beanを生成し、次の行へ */
 			odbList.add(new OperationDataBean(cdb, oe, elm, name, num, input));

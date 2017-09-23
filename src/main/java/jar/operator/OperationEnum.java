@@ -34,6 +34,24 @@ public enum OperationEnum {
 			getElement(odb).click();
 		}
 	},
+	CHECK_ON {
+		@Override
+		public void operate(OperationDataBean odb) throws AppException {
+			getElement(odb).setSelected(true);
+		}
+	},
+	CHECK_OFF {
+		@Override
+		public void operate(OperationDataBean odb) throws AppException {
+			getElement(odb).setSelected(false);
+		}
+	},
+	DROP_DOWN {
+		@Override
+		public void operate(OperationDataBean odb) throws AppException {
+			getElement(odb).selectOption(odb.getInputData());
+		}
+	},
 	DOUBLE_CLICK {
 		@Override
 		public void operate(OperationDataBean odb) throws AppException {
@@ -90,7 +108,6 @@ public enum OperationEnum {
 			}
 		}
 	},
-	/** プルダウン */
 	TEXT_CHECK {
 
 		@Override

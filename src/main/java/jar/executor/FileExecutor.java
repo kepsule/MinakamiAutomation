@@ -63,7 +63,7 @@ public class FileExecutor {
 					}
 					App.errHandling(t);
 				}
-				MinakamiLogger.info("実行開終了：" + testDataPath.toString() + sheet.getSheetName());
+				MinakamiLogger.info("実行終了：" + testDataPath.toString() + sheet.getSheetName());
 			});
 
 	}
