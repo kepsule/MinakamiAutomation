@@ -70,6 +70,12 @@ public enum OperationEnum {
 			getElement(odb).pressEnter();
 		}
 	},
+	ALERT_CHECK {
+		@Override
+		public void operate(OperationDataBean odb) throws AppException {
+			confirm(odb.getInputData());
+		}
+	},
 	END {
 		@Override
 		public void operate(OperationDataBean odb) throws AppException {
