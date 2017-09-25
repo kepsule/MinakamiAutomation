@@ -155,7 +155,7 @@ public enum OperationEnum {
 								.resolve(Paths.get(name).getFileName()).toString()),
 								StandardCopyOption.REPLACE_EXISTING);
 			} catch (IOException e) {
-				throw new AppException("IOException", "IMAGEPICTURE failed");
+				throw new AppException("IOException", "IMAGEPICTURE failed", e);
 			}
 		}
 	},
@@ -169,7 +169,7 @@ public enum OperationEnum {
 					CommonDataBean.getDbPath(), CommonDataBean.getDbProps(),
 					odb.getInputData());
 			} catch (SQLException e) {
-				throw new AppException("SQLException", this.name() + "failed");
+				throw new AppException("SQLException", this.name() + "failed", e);
 			}
 		}
 	},
@@ -191,7 +191,7 @@ public enum OperationEnum {
 							+ "\nBut actual is :" + getElement(odb).val());
 				}
 			} catch (SQLException e) {
-				throw new AppException("SQLException", this.name() + "failed");
+				throw new AppException("SQLException", this.name() + "failed", e);
 			}
 		}
 	},
@@ -209,7 +209,7 @@ public enum OperationEnum {
 					throw new AssertException("Record is exist");
 				}
 			} catch (SQLException e) {
-				throw new AppException("SQLException", this.name() + "failed");
+				throw new AppException("SQLException", this.name() + "failed", e);
 			}
 		}
 	},
@@ -229,7 +229,7 @@ public enum OperationEnum {
 				bw.flush();
 				bw.write(WebDriverRunner.getWebDriver().getPageSource());
 			}} catch (IOException e) {
-				throw new AppException("IOException", "HTML failed");
+				throw new AppException("IOException", "HTML failed", e);
 			}
 		}
 

@@ -11,7 +11,6 @@ import jar.bean.OperationDataBean;
 public class AppException extends Exception {
 
 	private String name;
-	private String message;
 	private OperationDataBean odb;
 
 	public AppException(){}
@@ -19,8 +18,13 @@ public class AppException extends Exception {
 		this.name = name;
 	}
 	public AppException(String name, String message) {
+		super(message);
 		this.name = name;
-		this.message = message;
+	}
+
+	public AppException(String name, String message, Throwable cause) {
+		super(message, cause);
+		this.name = name;
 	}
 
 	public void setOperationDataBean(OperationDataBean odb) {
@@ -29,7 +33,7 @@ public class AppException extends Exception {
 
 	/** エラーメッセージ取得 */
 	public String getErrMessage() {
-		return "throws：" + name + "\nDetail：" + message;
+		return "throws：" + name + "\nDetail：" + getMessage();
 	}
 
 	/** 処理内容取得 */
